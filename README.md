@@ -1,85 +1,174 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Documentación del Proyecto NestJS: Strip Comments API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Índice
+1. [Descripción del Proyecto](#descripción-del-proyecto)
+2. [Requisitos Previos](#requisitos-previos)
+3. [Configuración del Entorno](#configuración-del-entorno)
+4. [Estructura del Proyecto](#estructura-del-proyecto)
+5. [Desarrollo](#desarrollo)
+6. [Construcción](#construcción)
+7. [Pruebas](#pruebas)
+8. [Despliegue](#despliegue)
+9. [API Documentation](#api-documentation)
+## Descripción del Proyecto
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este proyecto implementa una API RESTful utilizando NestJS para eliminar comentarios de un texto dado. La API recibe un texto y una lista de marcadores de comentarios, y devuelve el texto con los comentarios eliminados.
 
-## Description
+## Requisitos Previos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Node.js (versión 20.x o superior)
+- pnpm (versión 9.x o superior)
+- Docker (opcional, para construcción y despliegue local)
+- Cuenta en Fly.io (para despliegue en la nube)
 
-## Project setup
+## Configuración del Entorno
 
-```bash
-$ npm install
+1. Clonar el repositorio:
+   ```
+   git clone https://github.com/osvalois/string-test
+   cd string-test
+   ```
+
+2. Instalar dependencias:
+   ```
+   pnpm install
+   ```
+
+3. Configurar variables de entorno:
+   Crear un archivo `.env` en la raíz del proyecto y añadir las siguientes variables:
+   ```
+   PORT=3000
+   NODE_ENV=development
+   ```
+
+## Estructura del Proyecto
+
+```
+.
+├── src/
+│   ├── strip-comments/
+│   │   ├── strip-comments.controller.ts
+│   │   ├── strip-comments.service.ts
+│   │   ├── strip-comments.module.ts
+│   │   └── strip-comments.dto.ts
+│   ├── app.module.ts
+│   └── main.ts
+├── test/
+│   ├── app.e2e-spec.ts
+│   └── jest-e2e.json
+├── Dockerfile
+├── .dockerignore
+├── .gitignore
+├── package.json
+├── pnpm-lock.yaml
+├── tsconfig.json
+├── nest-cli.json
+└── README.md
 ```
 
-## Compile and run the project
+## Desarrollo
 
-```bash
-# development
-$ npm run start
+Para iniciar el servidor de desarrollo:
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```
+pnpm run start:dev
 ```
 
-## Run tests
+El servidor estará disponible en `http://localhost:3000`.
 
-```bash
-# unit tests
-$ npm run test
+## Construcción
 
-# e2e tests
-$ npm run test:e2e
+Para construir el proyecto:
 
-# test coverage
-$ npm run test:cov
+```
+pnpm run build
 ```
 
-## Resources
+Esto generará los archivos compilados en el directorio `dist/`.
 
-Check out a few resources that may come in handy when working with NestJS:
+## Pruebas
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Para ejecutar las pruebas unitarias:
 
-## Support
+```
+pnpm run test
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Para las pruebas e2e:
 
-## Stay in touch
+```
+pnpm run test:e2e
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Despliegue
 
-## License
+### Despliegue Local con Docker
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+1. Construir la imagen Docker:
+   ```
+   docker build -t strip-comments-api .
+   ```
+
+2. Ejecutar el contenedor:
+   ```
+   docker run -p 3000:3000 strip-comments-api
+   ```
+
+### Despliegue en Fly.io
+
+1. Asegúrate de tener la CLI de Fly.io instalada y estar autenticado.
+
+2. Inicializa tu aplicación en Fly.io (si aún no lo has hecho):
+   ```
+   fly launch
+   ```
+
+3. Despliega la aplicación:
+   ```
+   fly deploy
+   ```
+
+4. Para ver los logs de la aplicación:
+   ```
+   fly logs
+   ```
+
+## API Documentation
+
+### Endpoint: POST /strip-comments
+
+Elimina los comentarios de un texto dado.
+
+#### Request Body
+
+```json
+{
+  "input": "string",
+  "commentMarkers": "string[]"
+}
+```
+
+#### Response
+
+```json
+{
+  "result": "string"
+}
+```
+
+#### Ejemplo
+
+Request:
+```json
+{
+  "input": "apples, pears # and bananas\ngrapes\nbananas !apples",
+  "commentMarkers": ["#", "!"]
+}
+```
+
+Response:
+```json
+{
+  "result": "apples, pears\ngrapes\nbananas"
+}
+```

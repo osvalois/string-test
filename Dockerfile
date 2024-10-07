@@ -1,47 +1,41 @@
-# syntax = docker/dockerfile:1
+# Usa una imagen base de Node.js LTS
+FROM node:20-alpine AS builder
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=20.17.0
-FROM node:${NODE_VERSION}-slim as base
-
-LABEL fly_launch_runtime="NestJS"
-
-# NestJS app lives here
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Set production environment
-ENV NODE_ENV="production"
+# Instala las dependencias necesarias
+RUN apk add --no-cache python3 make g++
 
-# Install pnpm
-ARG PNPM_VERSION=9.8.0
-RUN npm install -g pnpm@$PNPM_VERSION
+# Instala pnpm globalmente
+RUN npm install -g pnpm
 
-# Install SSL certificates
-RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+# Copia los archivos de configuración del proyecto
+COPY package.json ./
+COPY pnpm-lock.yaml* ./
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
+# Instala las dependencias (con o sin archivo de bloqueo)
+RUN if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; \
+    else pnpm install; fi
 
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
-
-# Install node modules
-COPY package-lock.json package.json pnpm-lock.yaml yarn.lock ./
-RUN pnpm install --prod=false --no-frozen-lockfile
-
-# Copy application code
+# Copia el resto de los archivos del proyecto
 COPY . .
 
-# Build application
+# Construye la aplicación
 RUN pnpm run build
 
-# Final stage for app image
-FROM base
+# Etapa de producción
+FROM node:20-alpine
 
-# Copy built application
-COPY --from=build /app /app
+WORKDIR /app
 
-# Start the server by default, this can be overwritten at runtime
+# Copia los archivos necesarios desde la etapa de construcción
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY package.json ./
+
+# Expone el puerto en el que se ejecutará la aplicación
 EXPOSE 3000
-CMD [ "pnpm", "run", "start" ]
+
+# Comando para ejecutar la aplicación
+CMD ["node", "dist/main.js"]
